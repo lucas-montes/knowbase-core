@@ -1,0 +1,4 @@
+.vscode
+test.db
+build/*
+!build/.placeholder
