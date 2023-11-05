@@ -25,4 +25,12 @@ private:
     std::string dbName;
 };
 
+class Model
+{
+public:
+    virtual std::string insert();
+
+private:
+    virtual std::string table();
+};
 #endif

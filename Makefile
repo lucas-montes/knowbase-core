@@ -1,7 +1,7 @@
 .PHONY: all
 
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++20 -Wall
 LDLIBS = -lsqlite3
 
 SRCDIR = src
@@ -25,3 +25,6 @@ $(OBJDIR):
 
 clean:
 	rm -f $(OBJDIR)/*.o $(TARGET)
+
+compile_commands:
+	compiledb make
