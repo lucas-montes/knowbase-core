@@ -29,12 +29,10 @@ pub async fn get_file_paths() -> Vec<PathBuf> {
 
 pub fn get_word_count(filepath: &PathBuf) -> HashMap<String, u8> {
     let mut word_count: HashMap<String, u8> = HashMap::new();
-    for line in get_lines(filepath) {
-        match line {
-            Ok(v) => count_words(v, &mut word_count),
-            Err(err) => panic!("get_word_count {:?}", err),
-        }
-    }
+    get_lines(filepath).for_each(|f| match f {
+        Ok(v) => count_words(v, &mut word_count),
+        Err(err) => panic!("get_word_count {:?}", err),
+    });
     word_count
 }
 
