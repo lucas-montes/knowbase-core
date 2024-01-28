@@ -1,3 +1,4 @@
+use crate::engine::prueba;
 use crate::engine::process;
 use std::path::PathBuf;
 
@@ -19,6 +20,14 @@ impl Cli {
             Commands::Add { path } => {
                 todo!("f");
             }
+            Commands::Test {
+                label,
+                item,
+                training,
+            } => {
+                    println!("starting process");
+                prueba(label, item, training).await;
+            }
             Commands::Similarity {
                 label,
                 item,
@@ -38,6 +47,15 @@ enum Commands {
         /// Stuff to add
         #[arg(required = true)]
         path: Vec<PathBuf>,
+    },
+    #[command(arg_required_else_help = true)]
+    Test {
+        #[arg(short, long)]
+        label: String,
+        #[arg(short, long)]
+        item: String,
+        #[arg(short, long)]
+        training: PathBuf,
     },
     #[command(arg_required_else_help = true)]
     Similarity {
