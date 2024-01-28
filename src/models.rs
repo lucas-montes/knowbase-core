@@ -14,10 +14,7 @@ pub struct File {
 
 impl File {
     pub fn new(file: String) -> Self {
-        return File {
-            id: f32::NAN as u8,
-            file,
-        };
+        File { id: 0, file }
     }
     pub async fn get_all(connection: &SqlitePool) -> Vec<String> {
         let query = format!("SELECT file FROM {table}", table = Self::table());
@@ -99,10 +96,7 @@ pub struct Word {
 
 impl Word {
     pub fn new(word: String) -> Self {
-        return Word {
-            id: f32::NAN as u8,
-            word,
-        };
+        Word { id: 0, word }
     }
 }
 
@@ -146,7 +140,7 @@ pub struct FileWordRelation {
 impl FileWordRelation {
     pub fn new(word_id: u8, file_id: u8, word_count: u8) -> Self {
         FileWordRelation {
-            id: f32::NAN as u8,
+            id: 0,
             word_id,
             file_id,
             word_count,
@@ -270,7 +264,7 @@ where
     }
 }
 
-async fn commit_transaction<'a>(transaction: Transaction<'a, Sqlite>) -> () {
+async fn commit_transaction(transaction: Transaction<'_, Sqlite>) {
     match transaction.commit().await {
         Ok(_) => {}
         Err(err) => {

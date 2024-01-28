@@ -1,5 +1,5 @@
 use crate::file_handlers::get_word_count;
-use crate::models::{File, FileWordRelation, Manager, Word, connect};
+use crate::models::{connect, File, FileWordRelation, Manager, Word};
 use std::{fs, path::PathBuf};
 
 pub async fn tf(paths: Vec<PathBuf>) {

@@ -9,12 +9,11 @@ use unidecode::unidecode;
 
 use crate::models::{connect, File as FileModel};
 
-
-pub async fn remove_file_paths(paths: Vec<PathBuf>){
+pub async fn remove_file_paths(paths: Vec<PathBuf>) {
     let connection = connect().await;
     FileModel::delete_many(paths, &connection).await;
 }
-pub async fn add_file_paths(paths: Vec<PathBuf>){
+pub async fn add_file_paths(paths: Vec<PathBuf>) {
     let connection = connect().await;
     FileModel::insert_many(paths, &connection).await;
 }
@@ -24,7 +23,7 @@ pub async fn get_file_paths() -> Vec<PathBuf> {
     FileModel::get_all(&connection)
         .await
         .iter()
-        .map(|f| PathBuf::from(f))
+        .map(PathBuf::from)
         .collect()
 }
 
@@ -48,9 +47,9 @@ pub fn get_lines(filepath: &PathBuf) -> io::Lines<io::BufReader<File>> {
 }
 
 fn count_words(line: String, word_count: &mut HashMap<String, u8>) {
-    for word in line.trim().split_whitespace() {
+    for word in line.split_whitespace() {
         let token = remove_punctuation(word);
-        if !is_stopword(&word) {
+        if !is_stopword(word) {
             let entry = word_count.entry(token).or_insert(0);
             *entry += 1;
         };
@@ -59,7 +58,7 @@ fn count_words(line: String, word_count: &mut HashMap<String, u8>) {
 
 pub fn is_stopword(word: &str) -> bool {
     let stop_words = HashSet::from(["los", "las", "la", "de", "y", "este", "esta"]);
-    return stop_words.contains(word);
+    stop_words.contains(word)
 }
 
 pub fn remove_punctuation(input: &str) -> String {
