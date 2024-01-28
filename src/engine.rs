@@ -19,4 +19,3 @@ pub async fn tf(paths: Vec<PathBuf>) {
         }
     }
 }
-
