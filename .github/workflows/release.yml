@@ -42,7 +42,7 @@ jobs:
             }
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Rust env
         uses: "./.github/actions/setup-rust-env"
@@ -53,7 +53,7 @@ jobs:
       - name: Rename the binary
         shell: bash
         run: |
-          binary_name="knowbase-core"
+          binary_name="knowbase"
 
           extension=""
           # windows binaries have ".exe" extension
