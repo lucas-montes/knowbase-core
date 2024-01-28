@@ -1,9 +1,32 @@
 use regex::Regex;
-use std::collections::{HashMap, HashSet};
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::PathBuf;
+use std::{
+    collections::{HashMap, HashSet},
+    fs::File,
+    io::{self, BufRead},
+    path::PathBuf,
+};
 use unidecode::unidecode;
+
+use crate::models::{connect, File as FileModel};
+
+
+pub async fn remove_file_paths(paths: Vec<PathBuf>){
+    let connection = connect().await;
+    FileModel::delete_many(paths, &connection).await;
+}
+pub async fn add_file_paths(paths: Vec<PathBuf>){
+    let connection = connect().await;
+    FileModel::insert_many(paths, &connection).await;
+}
+
+pub async fn get_file_paths() -> Vec<PathBuf> {
+    let connection = connect().await;
+    FileModel::get_all(&connection)
+        .await
+        .iter()
+        .map(|f| PathBuf::from(f))
+        .collect()
+}
 
 pub fn get_word_count(filepath: &PathBuf) -> HashMap<String, u8> {
     let mut word_count: HashMap<String, u8> = HashMap::new();

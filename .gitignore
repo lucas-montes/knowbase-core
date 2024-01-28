@@ -4,7 +4,6 @@ test.db
 build/*
 !build/.placeholder
 
-
-# Added by cargo
-
+myfile
+.env
 /target

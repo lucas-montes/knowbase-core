@@ -1,8 +1,7 @@
-use crate::engine::prueba;
-use crate::engine::process;
+use crate::cli_handlers::{add_files, remove_files, train};
 use std::path::PathBuf;
 
-use clap::{Args, Parser, Subcommand};
+use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
 #[command(name = "kb")]
@@ -17,24 +16,17 @@ impl Cli {
         let args = Cli::parse();
 
         match args.command {
-            Commands::Add { path } => {
-                todo!("f");
+            Commands::Server => {
+                todo!("im the server and im not ready");
             }
-            Commands::Test {
-                label,
-                item,
-                training,
-            } => {
-                    println!("starting process");
-                prueba(label, item, training).await;
+            Commands::Remove { paths } => {
+                remove_files(paths).await;
             }
-            Commands::Similarity {
-                label,
-                item,
-                training,
-            } => {
-                    println!("starting process");
-                process(label, item, training).await;
+            Commands::Add { paths } => {
+                add_files(paths).await;
+            }
+            Commands::Train => {
+                train().await;
             }
         }
     }
@@ -42,28 +34,18 @@ impl Cli {
 
 #[derive(Debug, Subcommand)]
 enum Commands {
+    Train,
+    #[command(arg_required_else_help = true)]
+    Remove {
+        /// Stuff to remove
+        #[arg(required = true)]
+        paths: Vec<PathBuf>,
+    },
     #[command(arg_required_else_help = true)]
     Add {
         /// Stuff to add
         #[arg(required = true)]
-        path: Vec<PathBuf>,
+        paths: Vec<PathBuf>,
     },
-    #[command(arg_required_else_help = true)]
-    Test {
-        #[arg(short, long)]
-        label: String,
-        #[arg(short, long)]
-        item: String,
-        #[arg(short, long)]
-        training: PathBuf,
-    },
-    #[command(arg_required_else_help = true)]
-    Similarity {
-        #[arg(short, long)]
-        label: String,
-        #[arg(short, long)]
-        item: String,
-        #[arg(short, long)]
-        training: PathBuf,
-    },
+    Server,
 }
