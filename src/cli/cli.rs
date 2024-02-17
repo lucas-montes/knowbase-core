@@ -23,9 +23,10 @@ impl Cli {
 
         match args.command {
             Commands::Todo(args) => args.handle_args().await,
-            Commands::Server => todo!("im the server and im not ready"),
             Commands::Remove { paths } => remove_files(paths).await,
             Commands::Add { paths } => add_files(paths).await,
+            // Move those three below into a separated struct. something like tools for Todo
+            Commands::Server => todo!("im the server and im not ready"),
             Commands::Train => train().await,
             Commands::Lsp => match run_server() {
                 Ok(_) => 0,

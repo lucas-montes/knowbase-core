@@ -9,17 +9,11 @@ use unidecode::unidecode;
 
 use crate::models::{connect, File as FileModel};
 
-use aromatic::migrate;
-use menva::read_default_file;
-
 pub async fn remove_file_paths(paths: Vec<PathBuf>) {
-    //TODO move this outside
-    read_default_file();
-    migrate("migrations").await;
     let connection = connect().await;
     FileModel::delete_many(paths, &connection).await;
 }
-pub async fn add_file_paths(paths: Vec<PathBuf>) {
+pub async fn add_file_paths(paths: &Vec<PathBuf>) {
     let connection = connect().await;
     FileModel::insert_many(paths, &connection).await;
 }

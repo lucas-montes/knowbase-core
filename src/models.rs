@@ -42,7 +42,7 @@ impl File {
         execute_query(&query, transaction).await
     }
 
-    pub async fn insert_many(paths: Vec<PathBuf>, connection: &SqlitePool) -> u64 {
+    pub async fn insert_many(paths: &Vec<PathBuf>, connection: &SqlitePool) -> u64 {
         let values = paths
             .iter()
             .map(|p| format!("('{}')", p.to_str().unwrap()))
