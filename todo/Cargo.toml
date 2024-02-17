@@ -1,0 +1,20 @@
+[package]
+name = "todo"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+notify-rust = "4.5.0"
+chrono = "0.4.24"
+serde.workspace = true
+serde_json.workspace = true
+clap.workspace = true
+async-trait.workspace = true
+tokio.workspace = true
+aromatic.workspace = true
+sqlx.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+tracing-appender.workspace = true
