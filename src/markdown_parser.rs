@@ -1,6 +1,11 @@
 use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
 use std::path::PathBuf;
-use tokio::{fs::File, io::AsyncReadExt};
+use tokio::{
+    fs::{canonicalize, File},
+    io::AsyncReadExt,
+};
+
+use todo::tasks::{Task, TasksFile};
 
 pub async fn parse_markdown(paths: &Vec<PathBuf>) {
     let mut options = Options::empty();
@@ -24,51 +29,81 @@ async fn parse_file(path: &PathBuf, parser_options: Options) {
     read_events(&path, &markdown_content, parser_options).await;
 }
 
-struct Task {
-    text: String,
-    file: PathBuf,
+#[derive(Debug, Default)]
+struct TaskFactory {
+    tasks: Vec<Task>,
+    current: Task,
 }
 
-async fn read_events(path: &PathBuf,markdown_content: &str,parser_options: Options) {
+impl TaskFactory {
+    fn new() -> Self {
+        TaskFactory::default()
+    }
+    fn save(self) {
+        TasksFile::add_many(self.tasks);
+    }
+    fn append(&mut self) -> &mut Self {
+        self.tasks.push(self.current.clone());
+        self.current = Task::default();
+        self
+    }
+    fn set_description(&mut self, description: String) -> &mut Self {
+        self.current.description = description;
+        self
+    }
+    fn set_title(&mut self, title: String) -> &mut Self {
+        self.current.title = title;
+        self
+    }
+    fn set_done(&mut self, done: bool) -> &mut Self {
+        self.current.done = done;
+        self
+    }
+}
+
+async fn read_events(path: &PathBuf, markdown_content: &str, parser_options: Options) {
     let parser = Parser::new_ext(markdown_content, parser_options);
+    let mut is_list = false;
+    let mut tasks = TaskFactory::new();
+    let abs_path = match canonicalize(path).await {
+        Ok(a) => a.to_str().unwrap().to_string(),
+        Err(err) => panic!("{err}"),
+    };
     for event in parser {
         match event {
-            Event::Start(tag) => {
-                match tag {
-                    Tag::Link {
-                        link_type,
-                        dest_url,
-                        title,
-                        id,
-                    } => {
-                    }
-                    Tag::List(None) => {
-                        println!("Unordered List Start");
-                    }
-                    // Let's only handle unordered lists like:
-                    // - []
-                    _ => {}
+            Event::Start(tag) => match tag {
+                Tag::Link {
+                    link_type,
+                    dest_url,
+                    title,
+                    id,
+                } => {}
+                Tag::List(_) => {
+                    is_list = true;
                 }
-            }
+                _ => {}
+            },
             Event::Text(text) => {
-                // Process text events, you can implement your logic here
-                println!("Event Text: {}", text);
-            }
-            Event::TaskListMarker(t) => {
-                println!("Event tasklistmarker: {}", t);
-            }
-            Event::End(tag) => {
-                match tag {
-                    TagEnd::List(false) => {
-                        println!("Unordered List End");
-                    }
-                    TagEnd::Item=>{}
-                    TagEnd::Link=>{}
-                    TagEnd::Paragraph=>{}
-                    _ => {}
+                if !text.is_empty() && is_list {
+                    tasks
+                        .set_description(abs_path.clone())
+                        .set_title(text.to_string())
+                        .append();
                 }
             }
+            Event::TaskListMarker(completed) => {
+                tasks.set_done(completed);
+            }
+            Event::End(tag) => match tag {
+                TagEnd::List(_) => {
+                    is_list = false;
+                }
+                TagEnd::Link => {}
+                TagEnd::Paragraph => {}
+                _ => {}
+            },
             _ => {}
         }
     }
+    tasks.save();
 }

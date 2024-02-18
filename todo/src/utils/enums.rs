@@ -8,11 +8,11 @@ pub enum RelationAction {
     Remove,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Copy, ValueEnum)]
+#[derive(Debug,Default, Serialize, Deserialize, Clone, PartialEq, Copy, ValueEnum)]
 pub enum Priority {
     High,
     Medium,
-    Low,
+    #[default] Low,
 }
 impl FromStr for Priority {
     type Err = String;

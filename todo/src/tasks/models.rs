@@ -4,7 +4,9 @@ use crate::utils::{Day, Priority};
 use chrono::NaiveTime;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+
+
+#[derive(Debug, Default, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Task {
     pub id: i16,

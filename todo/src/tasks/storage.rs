@@ -11,6 +11,16 @@ pub struct TasksFile {
 }
 
 impl TasksFile {
+    pub fn add_many(tasks: Vec<Task>) -> i16 {
+        let mut manager = Self::get_or_create();
+        for mut task in tasks {
+            task.id = manager.get_latest_id();
+            //println!("{task:?}");
+            manager.objects.entry(task.id).or_insert(task);
+        }
+        //manager.save_changes();
+        0
+    }
     pub fn add(
         &mut self,
         title: String,

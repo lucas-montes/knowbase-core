@@ -1,11 +1,12 @@
 # TODO
 ## Embeddings
-- [] Tokenization
+- [ ] Tokenization
 - [X] Implement TF-IDF
-- [] Implement doc2vec or word2vec (improvement)
-- [] Add server
-- [] Add lsp
-- [] Add tasks creation
+- [ ] Implement doc2vec or word2vec (improvement)
+- [ ] Add server
+- [ ] Add lsp
+- [ ] Better manage the models. Switch from json to sqlite to be able to delete tasks when a file is deleted
+- [X] Add tasks creation
 
 ## Search
-- [] Semantic Similarity Using Graph-Based Approaches
+1. [ ] Semantic Similarity Using Graph-Based Approaches
