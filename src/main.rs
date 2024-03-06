@@ -7,11 +7,11 @@ mod models;
 use cli::Cli;
 
 use aromatic::migrate;
-use menva::read_default_file;
+use menva::read_env_file;
 
 #[tokio::main]
 async fn main() {
-    read_default_file();
+    read_env_file("/home/lucas/Projects/knowbase/knowbase-core/.env");
     migrate("migrations").await;
     Cli::handle().await;
 }

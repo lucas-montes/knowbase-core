@@ -11,6 +11,7 @@ pub async fn add_files(paths: Vec<PathBuf>) -> i16 {
     // Lets read it twice now. Maybe read it only once and do clever things like adding weights
     // depending on what the text is (Header(H1), Link, etc...).
     parse_markdown(&paths).await;
+    train().await;
     0
 }
 

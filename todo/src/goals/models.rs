@@ -2,8 +2,12 @@ use crate::utils::Priority;
 use chrono::Local;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
+use sqlx::{
+    sqlite::{SqliteConnection, SqlitePool, SqlitePoolOptions, SqliteRow},
+    FromRow, Row, Sqlite, Transaction,
+};
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug,FromRow, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Goal {
     pub id: i16,

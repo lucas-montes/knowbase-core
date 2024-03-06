@@ -1,13 +1,12 @@
 use crate::file_handlers::get_word_count;
 use crate::models::{connect, File, FileWordRelation, Manager, Word};
-use std::{fs, path::PathBuf};
+use std::path::PathBuf;
 
 pub async fn tf(paths: Vec<PathBuf>) {
     let connection = connect().await;
     for filepath in paths {
         let word_count = get_word_count(&filepath);
-        let fullpath = fs::canonicalize(filepath).unwrap();
-        let file = File::new(fullpath.to_string_lossy().to_string())
+        let file = File::new(filepath.to_str().unwrap().to_string())
             .get_or_create(&connection)
             .await;
 

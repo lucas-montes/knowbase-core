@@ -27,7 +27,7 @@ pulldown-cmark = "0.10.0"
 [workspace.dependencies]
 clap_complete = { version = "4.3.1" }
 clap = { version = "4.5.0", features = ["derive","cargo","default", "env"] }
-menva = "1.0.0"
+menva = { path = "../../elerem/menva" }
 tokio = { version = "1.28.2", features = ["full"] }
 async-trait = "0.1.74"
 serde = { version = "1.0.196", features = ["derive"] }

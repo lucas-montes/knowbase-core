@@ -45,7 +45,7 @@ impl File {
     pub async fn insert_many(paths: &Vec<PathBuf>, connection: &SqlitePool) -> u64 {
         let values = paths
             .iter()
-            .map(|p| format!("('{}')", p.to_str().unwrap()))
+            .map(|p| format!("('{}')", std::fs::canonicalize(p).unwrap().to_str().unwrap()))
             .collect::<Vec<String>>()
             .join(",");
         let query = format!(

@@ -1323,8 +1323,6 @@ checksum = "0a3e16585abb5284cee7918356c9a5e2f0c83d88d80ccd68864329701e3bbfbe"
 [[package]]
 name = "menva"
 version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4aeff87b67e4d739eb2d917e442228415d8282d039e0bb09c13daca8349f682c"
 
 [[package]]
 name = "minimal-lexical"
